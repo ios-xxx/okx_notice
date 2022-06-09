@@ -5,7 +5,7 @@ name: Python get okx notice
 
 on:
   schedule:
-    - cron:  '* * * * *'
+    - cron:  '*/10 * * * *'
   watch:
     types: [started]
 
