@@ -26,13 +26,15 @@ def readFileNoice():
     readNoticeArray = json.loads(readText);
    
     return readNoticeArray;
-
-def rebot(msg):
+# 调用机器人发消息
+# msg 要发送的消息
+# isAll 是否@所有人
+def rebot(msg,isAll = False):
+     
     headers = {"Content-Type": "application/json;charset=utf-8"}
     url='https://oapi.dingtalk.com/robot/send?access_token=ed67643de366bb6d9a917a87707fa1dbcd038d5933df99c7b7fc7de70a5571a5';
     data = {
         'msgtype':'text',
-        'conversationType':'2',
         'text':{
             'content':msg,
         },
@@ -41,11 +43,11 @@ def rebot(msg):
                 "18609263478"
             ],
             "isInAtList": True,
-            "isAtAll": False
+            "isAtAll": isAll
         }
         
         
     };
     requests.post(url,json.dumps(data),headers=headers);
 
-# rebot('公告小狗');
+# rebot('公告小狗',True);

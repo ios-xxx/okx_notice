@@ -6,6 +6,7 @@ import json
 import fileOp as fOp
 
 
+
 currentTime = int(time.time());
 
 mainUrl = 'https://www.okx.com';
@@ -31,8 +32,10 @@ if readNoticeArray ==False :
 # 记录是否有新的公告
 isNewNotice = False;
 
+currentDateStr = str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()));
+
 length = len(noticeArray);
-for i in range(0,length,1) :
+for i in range(0,length) :
     obj = noticeArray[i];
     title = obj['title'];
     publishTime = obj['publishDate']/1000;
@@ -47,17 +50,18 @@ for i in range(0,length,1) :
     
     # fCurrentTime = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(fileTime));
     
-    if publishTime > fileTime :
+    if publishTime != fileTime :
         print(title,'\n',publishDate);
-        baidu = pq('https://www.baidu.com',encoding="utf-8");
+        
         isNewNotice = True;
-        msg = '公告:\n\t{}\n\t{}\n\t{}\n\t'.format(publishDate,title,mainUrl+obj['link']);
-        break;
-
+        msg = '公告:\t\n\t发送:{}\n\t上线:{}\n\t{}\n\t{}\n\t'.format(currentDateStr,publishDate,title,mainUrl+obj['link']);
+        fOp.rebot(msg,False);
+    break;    
+ 
 if isNewNotice == False:
-    msg = "没有新公告";
+    msg = "\t没有新公告\n\t";
     print(msg) ;
-    fOp.rebot(msg) ;
+    fOp.rebot(msg,True) ;
 # exit(0);
 fOp.writeToNoticeFile(noticeArray); 
 
