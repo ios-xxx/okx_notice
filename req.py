@@ -1,6 +1,5 @@
-import requests
 from pyquery import PyQuery as pq
-import time
+import time,pytz
 import json
 
 import fileOp as fOp
@@ -54,7 +53,7 @@ for i in range(0,length) :
         print(title,'\n',publishDate);
         
         isNewNotice = True;
-        msg = '公告:\t\n\t发送:{}\n\t上线:{}\n\t{}\n\t{}\n\t'.format(currentDateStr,publishDate,title,mainUrl+obj['link']);
+        msg = '公告:\t\n\t{}\n\t{}\n\t发送:{}\n\t上线:{}\n\t'.format(title,mainUrl+obj['link'],currentDateStr,publishDate);
         fOp.rebot(msg,False);
     break;    
  
