@@ -1,5 +1,5 @@
 from pyquery import PyQuery as pq
-import time,pytz
+import time,pytz,datetime
 import json
 
 import fileOp as fOp
@@ -18,7 +18,7 @@ headers = {
             "accept-language":'zh-CN'
            };
 # res = requests.get(url);
-doc = pq(url,encoding='utf-8',headers=headers,proxies=proxy);
+doc = pq(url,encoding='utf-8',headers=headers);
 
 noticeArray =  json.loads(doc.text())['data']['notices'];
 
@@ -31,15 +31,16 @@ if readNoticeArray ==False :
 # 记录是否有新的公告
 isNewNotice = False;
 
-currentDateStr = str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime()));
-
+currentDate = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime());
+currentDateStr = time.mktime(datetime.datetime.strptime(currentDate,'%Y-%m-%d %H:%M:%S').replace(tzinfo=pytz.timezone('Asia/Shanghai')).timetuple());
+currentDateStr =  time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(currentDateStr));  
 length = len(noticeArray);
+
 for i in range(0,length) :
     obj = noticeArray[i];
     title = obj['title'];
     publishTime = obj['publishDate']/1000;
     publishDate = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(publishTime));
-   
     fileObj = None;
     fileTime = 0.0;
     
@@ -53,6 +54,7 @@ for i in range(0,length) :
         print(title,'\n',publishDate);
         
         isNewNotice = True;
+        
         msg = '公告:\t\n\t{}\n\t{}\n\t发送:{}\n\t上线:{}\n\t'.format(title,mainUrl+obj['link'],currentDateStr,publishDate);
         fOp.rebot(msg,False);
     break;    
